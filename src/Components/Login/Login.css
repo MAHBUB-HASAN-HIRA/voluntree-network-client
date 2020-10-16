@@ -1,0 +1,38 @@
+.tree_img_logo{
+    width: 200px;
+    object-fit: contain;
+    object-position: center;
+    margin: 30px 40%;
+}
+
+.popupSignInContainer{
+    border: 1px solid gray;
+    width: 600px;
+    height: 400px;
+    margin: 0 auto 40px auto;
+    text-align: center;
+    padding:120px 0;
+    border-radius:5px;
+
+}
+.popupSignIn{
+    width:80%;
+    border: 1px solid gray;
+    margin:20px auto;
+    padding:7px;
+    border-radius: 25px;
+    cursor: pointer;
+    
+}
+
+.popupSignIn img{
+    width:30px;
+    height:30px;
+    object-fit: cover;
+    object-position: center;
+}
+ .continue{
+    display: inline;
+    text-align: center;
+    padding:0 30%; 
+}

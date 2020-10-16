@@ -1,0 +1,28 @@
+.navForHome{
+    display:block;
+}
+.navForOther{
+    display: none;
+}
+
+.img_logo{
+    height: 80px;
+    width: 200px;
+    object-fit: contain;
+    object-position: center;
+}
+.nav-item{
+    margin: 10px;
+}
+.nav_link{
+    color: #000000;
+    padding: 5px 15px;
+}
+.nav_link:hover{
+    text-decoration: none;
+    color: #3F90FC;
+}
+
+.name:hover{
+    color: black;
+}

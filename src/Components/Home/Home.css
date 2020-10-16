@@ -1,0 +1,11 @@
+.custom_card{
+    float: left;
+    width: 15rem;
+    margin: 15px;
+    text-align: center;
+    border-radius: 10px;
+}
+.card_img{
+    width: 15rem;
+    height:250px;
+}
