@@ -1,5 +1,8 @@
+.nav_div{
+    background-color: #F8FAFC;
+}
 .navForHome{
-    display:block;
+    display:block;    
 }
 .navForOther{
     display: none;

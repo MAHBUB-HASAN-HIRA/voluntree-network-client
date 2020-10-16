@@ -11,6 +11,8 @@ import Register from './Components/Register/Register';
 import NotFound from './Components/NotFound/NotFound';
 import { createContext } from 'react';
 import Login from './Components/Login/Login';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+import MyTask from './Components/MyTask/MyTask';
 
 export const UserContext = createContext();
 
@@ -29,8 +31,11 @@ function App() {
           <Route path='/login'>
             <Login/>
           </Route>
-          <Route path='/register'>
+          <PrivateRoute path='/register'>
             <Register/>
+          </PrivateRoute>
+          <Route path='/mytasks'>
+            <MyTask/>
           </Route>
           <Route path='*'>
             <NotFound/>

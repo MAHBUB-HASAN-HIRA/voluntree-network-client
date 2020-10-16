@@ -1,0 +1,22 @@
+.myTasks_container{
+    background-color: #F8FAFC !important;
+}
+
+.card-row{
+    margin:0 30px;
+}
+.allCard_container{
+    margin: 0 auto;
+}
+
+.card_data{
+    padding: 10px;
+}
+.card_container{
+    float: left;
+    max-width:28.125rem;
+    margin: 20px; 
+}
+.card-body button{
+    margin: 40px 50% !important;
+}

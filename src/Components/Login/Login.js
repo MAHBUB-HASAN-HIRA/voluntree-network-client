@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import googleIcon from '../../volunteer-network-resources/logos/google.png';
 import './Login.css';
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 firebase.initializeApp(firebaseConfig);
 
@@ -24,6 +24,12 @@ const Login = () => {
         success: false,
     });
 
+    const history = useHistory();
+    const location = useLocation();
+  
+    const { from } = location.state || { from: { pathname: "/" } };
+
+
   const handleGoogleSignIn = () =>{
         const googleProvider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(googleProvider)
@@ -38,6 +44,7 @@ const Login = () => {
             }
             setUser(signedInUser);
             setLoggedInUser(signedInUser);
+            history.replace(from);
           })
           .catch(error => alert(error.message));
     }
@@ -49,17 +56,21 @@ const Login = () => {
     }
 
     return (
-        <div className='container'>          
-                <Link to='/'><img className='tree_img_logo' src={TreeLogo} alt=""/></Link>
-             <div className='popupSignInContainer'>
-                <h3>Login With</h3>
-                <div onClick={handleGoogleSignIn} className='popupSignIn'>
-                    <img src={googleIcon} alt="sign in with google"/>
-                    <p className='continue'>Continue with Google</p>
+       <div className='login_container'>
+            <div className='container col-sm-6 col-md-8 col-lg-6 '>          
+                <div className='col-sm-10 col-md-8 col-lg-6 logo_container'>
+                    <Link to='/'><img className='tree_img_logo' src={TreeLogo} alt=""/></Link>
                 </div>
-                <p>Don't Have a Account? <Link to='#'>Create an Account</Link></p>
-           </div>
-        </div>
+                <div className='popupSignInContainer'>
+                    <h3>Login With</h3>
+                    <div onClick={handleGoogleSignIn} className='popupSignIn'>
+                        <img src={googleIcon} alt="sign in with google"/>
+                        <p className='continue'>Continue with Google</p>
+                    </div>
+                    <p>Don't Have a Account? <Link to='#'>Create an Account</Link></p>
+                </div>
+            </div>
+       </div>
     );
 };
 

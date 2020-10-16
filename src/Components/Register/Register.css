@@ -1,0 +1,55 @@
+.register_container{
+    background-color: #F8FAFC;
+    padding-bottom: 150px;
+}
+
+.registerFormContainer {
+    border: 1px solid gray;
+    margin: 0 auto 40px auto;
+    text-align: center;
+    padding:20px 0;
+    border-radius:5px;
+    background-color: white;
+}
+.register_form{
+    padding: 20px 0;
+}
+.register_form .cal{
+    max-height:200px;
+}
+.register_form input{
+    width: 80%;
+    height: 32px;
+    border: none;
+    border-bottom: 1px solid black;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    color: #000000;
+    margin: 15px 0;
+
+}
+
+.register_form .submit_btn{
+    height: 50px ;
+    border: none;
+    color: white;
+}
+
+/*DatePicker calender style edit */
+.nice-dates-navigation{
+    height: 40px;
+}
+.nice-dates-navigation a{
+    padding:20px 10px;
+}
+.nice-dates-day{
+        height: 60px !important;
+}
+.nice-dates-grid{
+    max-height: 300px !important;
+}
+
+.nice-dates-popover{
+    padding:10px;
+}
