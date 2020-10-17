@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css';
-import fakeData from './../fakeData/fakeData.json';
-import { Link } from 'react-router-dom';
-import { Card } from 'react-bootstrap';
 import { UserContext } from '../../App';
 import { useContext } from 'react';
+import Card from '../Card/Cards';
 
 const Home = () => {
     const [loggedInUser, setLoggedInUser, selectedTask, setSelectedTask] = useContext(UserContext);
     const [tasks, setTasks] = useState([]);
-
     const handleSelectedTask = task => {
         setSelectedTask(task);
     }
+    const colors = ['#FFBD3E', '#FF7044', '#3F90FC', '#421FCF'];
+    let colorIndex = 0
+    const handleColorIndex = () => colorIndex > 2 ?  colorIndex = 0 :  colorIndex = colorIndex + 1;
 
     useEffect(() => {
-        setTasks(fakeData);
+        fetch('http://localhost:4200/alltasks')
+        .then(res => res.json())
+        .then(data => setTasks(data))
     }, [])
 
     return (
@@ -31,15 +33,7 @@ const Home = () => {
             </div>
             <div>
                 { tasks &&
-                    tasks.map(task =>
-                        <Link to='/register'>
-                            <Card onClick={() => handleSelectedTask(task)}className='custom_card'>
-                                <Card.Img className='card_img' variant="top" src={task.img_link}/>
-                                <Card.Body>
-                                <Card.Title>{task.title}</Card.Title>
-                                </Card.Body>
-                            </Card> 
-                        </Link>)
+                    tasks.map(task =><Card key={task._id} colors={colors} handleColorIndex={handleColorIndex} handleSelectedTask={handleSelectedTask} task={task}></Card>)
                 }
             </div>
         </div>

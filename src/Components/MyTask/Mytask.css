@@ -20,3 +20,32 @@
 .card-body button{
     margin: 40px 50% !important;
 }
+
+@media screen and (max-width: 1200px) {
+    .card_container{
+        max-width:25rem;
+    }
+    .card-row{
+        margin:0 5px;
+    }
+  }
+  
+  /* On screens that are 600px or less, set the background color to olive */
+  @media screen and (max-width: 992px) {
+    .card_container{
+        max-width:30rem;
+        margin: 0 auto;
+    }
+    .card-row{
+        margin:0 ;
+    }
+  }
+  @media screen and (max-width: 600px){
+    .card_container{
+        max-width:20rem;
+        margin: 0 auto;
+    }
+    .card-row{
+        margin:0 5px;
+    }
+  }

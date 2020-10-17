@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 import './Register.css';
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
 import { useForm } from "react-hook-form";
@@ -10,18 +10,28 @@ import { UserContext } from '../../App';
 
 const Register = () => {
     const [loggedInUser, setLoggedInUser, selectedTask, setSelectedTask] = useContext(UserContext);
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(new Date());
     const { register, handleSubmit } = useForm();
 
-    const onSubmit = data => {
+    const history = useHistory()
 
+    const onSubmit = data => {
         const volunteerData = {
-            personalData:{...loggedInUser},
             task:{...selectedTask},
             registerData:{...data, date}
         }
-        console.log(volunteerData)
-    };
+        fetch('http://localhost:4200/register-user', {
+            method:'POST',
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify(volunteerData)
+            })
+            .then(res => res.json())
+            .then(data => {
+              if(data){
+                alert('Registration SuccessFully');
+                history.replace('/mytasks');
+              }});
+    };  
 
     return (
         <>
@@ -46,14 +56,17 @@ const Register = () => {
                                 )}
                                 </DatePicker>
                                 <input type='text' name="description" placeholder='Description'  ref={register({ required: true })} /><br/>
-                                <input type='text' name="task" defaultValue={selectedTask && selectedTask.title} placeholder='Task'  ref={register({ required: true })} /><br/>
+                                <input type='text' name="taskTitle" defaultValue={selectedTask && selectedTask.title} placeholder='Task'  ref={register({ required: true })} /><br/>
                                 <input value='Registration' className='submit_btn btn btn-primary' type="submit"/>
                             </form>
                         </div>
                     </div>
                 </div>
                 :
-                <div className="container">
+                <div className="container p_select">
+                    <div className='logo_container'>
+                        <Link to='/'><img className='tree_img_logo' src={TreeLogo} alt=""/></Link>
+                    </div>
                     <h1>Please Select a Task</h1>
                 </div>
             }

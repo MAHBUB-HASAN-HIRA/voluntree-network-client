@@ -15,8 +15,8 @@ const Login = () => {
     const [loggedInUser, setLoggedInUser] = useContext(UserContext)
     
     const [user, setUser] = useState({
-        isSignIn:true,
-        name:'Mahbub',
+        isSignIn:false,
+        name:'',
         email:'',
         password:'',
         photoURL:'',
@@ -28,7 +28,6 @@ const Login = () => {
     const location = useLocation();
   
     const { from } = location.state || { from: { pathname: "/" } };
-
 
   const handleGoogleSignIn = () =>{
         const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -44,6 +43,7 @@ const Login = () => {
             }
             setUser(signedInUser);
             setLoggedInUser(signedInUser);
+            localStorage.setItem(`userInfo`, JSON.stringify(signedInUser));
             history.replace(from);
           })
           .catch(error => alert(error.message));
@@ -54,7 +54,6 @@ const Login = () => {
         .then(res => { })
         .catch(error => alert(error.message));
     }
-
     return (
        <div className='login_container'>
             <div className='container col-sm-6 col-md-8 col-lg-6 '>          

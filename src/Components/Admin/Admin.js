@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
 import deleteLogo from "../../volunteer-network-resources/logos/trash-2 9.png";
@@ -12,8 +12,9 @@ import 'react-nice-dates/build/style.css';
 
 const Admin = () => {
   const [date, setDate] = useState(new Date());
-  const [registerList, setRegisterList] = useState(true);
+  const [registeredToggled, setRegisteredToggled] = useState(true);
   const [formData, setFormData] = useState({});
+  const [registerList, setRegisterList] = useState([])
 
   const handleBlur = e => {
     const newForm = {...formData}
@@ -24,26 +25,51 @@ const Admin = () => {
   const handleSubmit = ()=> {
     if(formData.title){
       const postData = {...formData, date};
+      fetch('http://localhost:4200/alltasks', {
+        method:'POST',
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify(postData)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if(data){
+            alert('Registration Successfull');
+          }});
+
     }
     else{
       alert('Please Enter Title and Date')
     }
   }
 
+const handleDelete = () => {
+  
+}
+
+    useEffect(() => {
+        fetch('http://localhost:4200/register-user')
+        .then(res => res.json())
+        .then(data =>{
+          if(data){
+            setRegisterList(data);
+          }
+        });
+    },[])
+
   return (
     <div>
       <div className="row">
         <div className="left_control">
             <Link to='/'><img className='tree_pic_logo' src={TreeLogo} alt=""/></Link>
-            <p  onClick={() => setRegisterList(true)} className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
-            <p onClick={() => setRegisterList(false)} className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
+            <p  onClick={() => setRegisteredToggled(true)} className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
+            <p onClick={() => setRegisteredToggled(false)} className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
         </div>
           <div className="rightData_show">
             <h4>Volunteer register list</h4>
             <div className='all_user_data_container'>
                 <div className='table_container'>
                 { 
-                    registerList ?
+                    registeredToggled ?
 
                     <table className="table">
                         <thead className="table_header table-borderless">
@@ -56,13 +82,18 @@ const Admin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Mark</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
-                            </tr> 
+                            { 
+                            registerList.length > 0 &&
+                              registerList.map(register_user =>
+                                <tr>
+                                  <td>{register_user.registerData.name}</td>
+                                  <td>{register_user.registerData.email}</td>
+                                  <td>{(new Date(register_user.registerData.date).toDateString('dd/MM/yyyy'))}</td>
+                                  <td>{register_user.registerData.taskTitle}</td>
+                                  <td className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
+                              </tr> 
+                              )
+                            }
                         </tbody>
                     </table>
 

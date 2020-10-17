@@ -1,0 +1,34 @@
+.custom_card{
+    float: left;
+    width: 15rem;
+    margin: 15px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.card_img{
+    width: 15rem;
+    height:250px;
+}
+
+@media screen and (max-width: 768px){
+    .custom_card{
+        width: 14rem;
+        margin: 15px 10px;
+    }
+    .card_img{
+        width: 13.9rem;
+        height:250px;
+    }
+  }
+  @media screen and (max-width: 520px){
+    .custom_card{
+        width: 20rem;
+        margin:15px 60px;
+    }
+    .card_img{
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+  }

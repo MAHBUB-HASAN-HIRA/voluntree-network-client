@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,12 +14,21 @@ import Login from './Components/Login/Login';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import MyTask from './Components/MyTask/MyTask';
 import Admin from './Components/Admin/Admin';
+import userEvent from '@testing-library/user-event';
 
 export const UserContext = createContext();
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
   const [selectedTask, setSelectedTask] = useState({});
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if(userInfo){
+     setLoggedInUser(userInfo); 
+    }
+  },[])
+
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser, selectedTask, setSelectedTask]}>
       <Router>
@@ -34,9 +43,9 @@ function App() {
           <PrivateRoute path='/register'>
             <Register/>
           </PrivateRoute>
-          <Route path='/admin'>
+          <PrivateRoute path='/admin'>
             <Admin/>
-          </Route>
+          </PrivateRoute>
           <PrivateRoute path='/mytasks'>
             <MyTask/>
           </PrivateRoute>

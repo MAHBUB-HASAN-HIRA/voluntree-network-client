@@ -12,6 +12,19 @@ const Header = () => {
     setCurrentLocation(window.location.pathname);
   }, [useParams()]);
 
+const handleSignOut = () => {
+  localStorage.removeItem(`userInfo`);
+  setLoggedInUser({
+    isSignIn:false,
+    name:'',
+    email:'',
+    password:'',
+    photoURL:'',
+    error:'',
+    success: false,
+  })
+}
+
   let customClassName = "navForOther";
   if (currentLocation === "/" || currentLocation === "/mytasks") {
     customClassName = "navForHome container";
@@ -62,6 +75,13 @@ const Header = () => {
                   <span className="nav_link name">
                     <strong>{loggedInUser.name}</strong>
                   </span>
+                )}
+              </li>
+              <li className="nav-item">
+                {loggedInUser.isSignIn && (
+                  <button onClick={handleSignOut} className="btn btn-danger">
+                    SignOut
+                  </button>
                 )}
               </li>
               <li className="nav-item">
