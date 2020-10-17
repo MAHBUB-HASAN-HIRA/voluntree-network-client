@@ -1,25 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Admin.css";
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
 import deleteLogo from "../../volunteer-network-resources/logos/trash-2 9.png";
 import { Link } from "react-router-dom";
 import userLogo from "../../volunteer-network-resources/logos/users-alt 1.png"
-import plusLogo from "../../volunteer-network-resources/logos/plus 1.png"
+import plusLogo from "../../volunteer-network-resources/logos/plus 1.png";
+import uploadLogo from "../../volunteer-network-resources/logos/cloud-upload-outline 1.png";
+import { enGB } from 'date-fns/locale';
+import { DatePicker } from 'react-nice-dates';
+import 'react-nice-dates/build/style.css';
 
 const Admin = () => {
+  const [date, setDate] = useState(new Date());
+  const [registerList, setRegisterList] = useState(true);
+  const [formData, setFormData] = useState({});
+
+  const handleBlur = e => {
+    const newForm = {...formData}
+    newForm[e.target.name] = e.target.value
+    setFormData(newForm);
+  };
+
+  const handleSubmit = ()=> {
+    if(formData.title){
+      const postData = {...formData, date};
+    }
+    else{
+      alert('Please Enter Title and Date')
+    }
+  }
 
   return (
     <div>
-      <div class="row">
-        <div class="left_control">
+      <div className="row">
+        <div className="left_control">
             <Link to='/'><img className='tree_pic_logo' src={TreeLogo} alt=""/></Link>
-            <p className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
-            <p className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
+            <p  onClick={() => setRegisterList(true)} className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
+            <p onClick={() => setRegisterList(false)} className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
         </div>
-        <div class="rightData_show">
+          <div className="rightData_show">
             <h4>Volunteer register list</h4>
             <div className='all_user_data_container'>
                 <div className='table_container'>
+                { 
+                    registerList ?
+
                     <table className="table">
                         <thead className="table_header table-borderless">
                             <tr>
@@ -36,13 +61,42 @@ const Admin = () => {
                                 <td>Mark</td>
                                 <td>Otto</td>
                                 <td>@mdo</td>
-                                <td className='delete_user_ogo'><img src={deleteLogo} alt="delete"/></td>
+                                <td className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
                             </tr> 
                         </tbody>
                     </table>
+
+                    :
+
+                    <div className="row">
+                      <div className='form_description_container'>
+                        <form>
+                          <label for='eventTitle'>Event Title</label>
+                          <input onBlur={handleBlur} type="text" name='title' className="form-control" placeholder="Enter Title" id="eventTitle" required/>
+                          <label for='description'>Description</label>
+                          <textarea onBlur={handleBlur} name='description' placeholder="Description" className="form-control" id="description" rows="4" />
+                        </form>
+                      </div>
+                      <div className='form_upload_container'>
+                        <label for='eventDate'>Event Date</label>
+                        <DatePicker date={date} className='date_picker' value={date} onDateChange={setDate} locale={enGB}>
+                            {({ inputProps, focused }) => (
+                                <input
+                                className={'input' + (focused ? ' -focused' : '')}
+                                {...inputProps}
+                                />
+                            )}
+                          </DatePicker>
+                        <label for='banner'>Description</label><br/>
+                        <input type="file" name="file-1[]" id="file-1" className="inputFile inputFile-1" data-multiple-caption="{count} files selected" multiple=""/>
+                        <label for="file-1"><img className='upload_img' src={uploadLogo} alt="upload"/> <span>Upload img</span></label>
+                      </div>
+                          <button onClick={handleSubmit} type='submit' className='submit_btn btn btn-primary'>Submit</button>
+                    </div>
+                }
                 </div>
             </div>
-        </div>
+          </div>
       </div>
     </div>
   );

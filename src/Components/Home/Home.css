@@ -9,3 +9,29 @@
     width: 15rem;
     height:250px;
 }
+
+.search_area{
+    margin:50px ;
+}
+.search_area h1{
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.search_area .input-group{
+    width: 50%;
+    margin: 0 auto;
+}
+
+
+@media screen and (max-width: 700px) {
+    .search_area .input-group{
+        width: 80%;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .search_area .input-group{
+        width: 95%;
+    }
+  }

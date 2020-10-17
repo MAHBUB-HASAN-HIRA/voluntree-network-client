@@ -20,7 +20,6 @@ export const UserContext = createContext();
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
   const [selectedTask, setSelectedTask] = useState({});
-  console.log(loggedInUser);
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser, selectedTask, setSelectedTask]}>
       <Router>
