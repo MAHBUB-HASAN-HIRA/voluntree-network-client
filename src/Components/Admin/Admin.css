@@ -1,0 +1,67 @@
+.left_control{
+    width:22%;
+    padding:20px 50px;
+}
+
+.tree_pic_logo{
+    width: 200px;
+    object-fit: contain;
+    object-position: center;
+    margin: 0 auto;
+}
+
+.volunteer_register_list{
+    cursor: pointer;
+    margin: 30px 0;
+    color: blue;
+    /* font-size: 16px; */
+}
+.volunteer_register_list:hover{
+    color: #FF7044;
+}
+.volunteer_register_list img{
+    width: 20px;
+    height: 20px;
+}
+
+.rightData_show{
+    width: 75%;
+}
+.rightData_show h4{
+    padding:30px;
+}
+
+.all_user_data_container{
+    background-color:#F4F7FC;
+    padding:20px;
+}
+.table_container{
+    background-color: #ffffff;
+    padding:20px;
+    border-radius: 15px;
+}
+
+.table_header{
+    background-color: #F5F6FA;
+ 
+}
+.delete_user_ogo img{
+    width:20px;
+    height: 20px;
+    cursor: pointer;
+    object-fit:contain;
+    object-position: center;
+    background-color:#FF444A;
+    padding:2px;
+    border-radius:3px;
+}
+@media only screen and (max-width: 800px) {
+    .left_control{
+        width:100%;
+        padding:20px 50px;
+    }
+    .rightData_show{
+        width: 100%;
+        background-color:rgb(22, 199, 223)
+    }
+  }
