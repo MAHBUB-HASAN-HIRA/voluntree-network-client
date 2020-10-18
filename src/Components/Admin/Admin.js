@@ -25,7 +25,7 @@ const Admin = () => {
   const handleSubmit = ()=> {
     if(formData.title){
       const postData = {...formData, date};
-      fetch('http://localhost:4200/alltasks', {
+      fetch('https://immense-spire-11805.herokuapp.com/alltasks', {
         method:'POST',
         headers:{'Content-Type': 'application/json'},
         body:JSON.stringify(postData)
@@ -33,7 +33,7 @@ const Admin = () => {
         .then(res => res.json())
         .then(data => {
           if(data){
-            alert('Registration Successfull');
+            alert('Event Added Successful');
           }});
 
     }
@@ -42,12 +42,35 @@ const Admin = () => {
     }
   }
 
-const handleDelete = () => {
-  
+const handleDelete = id => {
+
+    fetch(`https://immense-spire-11805.herokuapp.com/delete/${id}`, {
+        method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(data => {
+          if (data) {
+            alert('Volunteer SuccessFully Deleted')
+            afterDeleteDataLoad();
+          }
+      });
+
+
 }
 
+  const afterDeleteDataLoad = () => {
+    fetch('https://immense-spire-11805.herokuapp.com/register-user/admin')
+    .then(res => res.json())
+    .then(data =>{
+      if(data){
+        setRegisterList(data);
+      }
+    });
+
+  }
+
     useEffect(() => {
-        fetch('http://localhost:4200/register-user')
+        fetch('https://immense-spire-11805.herokuapp.com/register-user/admin')
         .then(res => res.json())
         .then(data =>{
           if(data){
@@ -65,7 +88,7 @@ const handleDelete = () => {
             <p onClick={() => setRegisteredToggled(false)} className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
         </div>
           <div className="rightData_show">
-            <h4>Volunteer register list</h4>
+            <h4>{registeredToggled ? "Volunteer register list" : "Add Event"}</h4>
             <div className='all_user_data_container'>
                 <div className='table_container'>
                 { 
@@ -90,7 +113,7 @@ const handleDelete = () => {
                                   <td>{register_user.registerData.email}</td>
                                   <td>{(new Date(register_user.registerData.date).toDateString('dd/MM/yyyy'))}</td>
                                   <td>{register_user.registerData.taskTitle}</td>
-                                  <td className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
+                                  <td onClick={() => handleDelete(register_user._id)} className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
                               </tr> 
                               )
                             }

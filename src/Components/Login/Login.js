@@ -44,16 +44,21 @@ const Login = () => {
             setUser(signedInUser);
             setLoggedInUser(signedInUser);
             localStorage.setItem(`userInfo`, JSON.stringify(signedInUser));
+            storeAuthToken();
             history.replace(from);
           })
           .catch(error => alert(error.message));
     }
 
-    const handleSignOut = () => {
-        firebase.auth().signOut()
-        .then(res => { })
-        .catch(error => alert(error.message));
+    const storeAuthToken = () => {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+        .then(function(idToken) {
+           sessionStorage.setItem('token', idToken);
+          }).catch(function(error) {
+            // Handle error
+          });
     }
+
     return (
        <div className='login_container'>
             <div className='container col-sm-6 col-md-8 col-lg-6 '>          

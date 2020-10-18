@@ -17,10 +17,9 @@ const Register = () => {
 
     const onSubmit = data => {
         const volunteerData = {
-            task:{...selectedTask},
-            registerData:{...data, date}
+            registerData:{...data, date,...selectedTask}
         }
-        fetch('http://localhost:4200/register-user', {
+        fetch('https://immense-spire-11805.herokuapp.com/register-user', {
             method:'POST',
             headers:{'Content-Type': 'application/json'},
             body:JSON.stringify(volunteerData)

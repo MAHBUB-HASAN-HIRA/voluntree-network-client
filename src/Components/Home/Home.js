@@ -11,11 +11,11 @@ const Home = () => {
         setSelectedTask(task);
     }
     const colors = ['#FFBD3E', '#FF7044', '#3F90FC', '#421FCF'];
-    let colorIndex = 0
+    let colorIndex = 0;
     const handleColorIndex = () => colorIndex > 2 ?  colorIndex = 0 :  colorIndex = colorIndex + 1;
 
     useEffect(() => {
-        fetch('http://localhost:4200/alltasks')
+        fetch('https://immense-spire-11805.herokuapp.com/alltasks')
         .then(res => res.json())
         .then(data => setTasks(data))
     }, [])
@@ -31,7 +31,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='card_contain'>
                 { tasks &&
                     tasks.map(task =><Card key={task._id} colors={colors} handleColorIndex={handleColorIndex} handleSelectedTask={handleSelectedTask} task={task}></Card>)
                 }

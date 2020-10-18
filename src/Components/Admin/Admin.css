@@ -106,7 +106,9 @@ z-index: -1;
 .form_description_container input, .form_upload_container input{
     margin-bottom: 20px;
 }
-
+.submit_btn{
+    margin: 50px;
+}
 @media (max-width: 1024px) {
     .left_control{
         width:100%;

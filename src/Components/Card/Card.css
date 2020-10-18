@@ -24,7 +24,7 @@
   @media screen and (max-width: 520px){
     .custom_card{
         width: 20rem;
-        margin:15px 60px;
+        margin:15px 10px;
     }
     .card_img{
         width: 100%;
