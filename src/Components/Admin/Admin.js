@@ -10,6 +10,7 @@ import { DatePicker } from 'react-nice-dates';
 import 'react-nice-dates/build/style.css';
 import FileBase64 from 'react-file-base64';
 import { UserContext } from "../../App";
+import loading from "../../volunteer-network-resources/loading.gif";
 
 const Admin = () => {
   const [loggedInUser] = useContext(UserContext);
@@ -79,23 +80,37 @@ const handleDelete = id => {
       });
   }
 
-    useEffect(() => {
-      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-      if(userInfo){
-        fetch(`https://voluntree-network-101.herokuapp.com/register-user/admin?email=${userInfo.email}`,{
-          method:'GET',
-          headers:{
-            'Content-Type': 'application/json',
-            'authorization': `Bearer ${token}`
-          },
-        })
-        .then(res => res.json())
-        .then(data =>{
-          if(data){
-            setRegisterList(data);
-          }
-        });
+const handleLoadRegisterList = () => {
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  const token = sessionStorage.getItem('token');
+  if(userInfo.email && token){
+    fetch(`https://voluntree-network-101.herokuapp.com/register-user/admin?email=${userInfo.email}`,{
+      method:'GET',
+      headers:{
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`
+      },
+    })
+    .then(res => res.json())
+    .then(data =>{
+      if(data){
+        setRegisterList(data);
       }
+    });
+  }
+
+}
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if(!token){
+          setTimeout(() => {
+            handleLoadRegisterList();
+          },4000);
+        }
+        if(token){
+          handleLoadRegisterList();
+        }
     },[])
 
   return (
@@ -114,29 +129,34 @@ const handleDelete = id => {
                     registeredToggled ?
 
                     <table className="table">
-                        <thead className="table_header table-borderless">
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email ID</th>
-                            <th scope="col">Registering Date</th>
-                            <th scope="col">Volunteer Task</th>
-                            <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { 
-                            registerList.length > 0 &&
-                              registerList.map(register_user =>
+                         { 
+                            registerList.length > 0 ?
+                          <>
+                              <thead className="table_header table-borderless">
                                 <tr>
-                                  <td>{register_user.registerData.name}</td>
-                                  <td>{register_user.registerData.email}</td>
-                                  <td>{(new Date(register_user.registerData.date).toDateString('dd/MM/yyyy'))}</td>
-                                  <td>{register_user.registerData.taskTitle}</td>
-                                  <td onClick={() => handleDelete(register_user._id)} className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
-                                </tr> 
-                              )
-                            }
-                        </tbody>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email ID</th>
+                                <th scope="col">Registering Date</th>
+                                <th scope="col">Volunteer Task</th>
+                                <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                  { registerList.map(register_user =>
+                                      <tr>
+                                        <td>{register_user.registerData.name}</td>
+                                        <td>{register_user.registerData.email}</td>
+                                        <td>{(new Date(register_user.registerData.date).toDateString('dd/MM/yyyy'))}</td>
+                                        <td>{register_user.registerData.taskTitle}</td>
+                                        <td onClick={() => handleDelete(register_user._id)} className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
+                                      </tr>)
+                                  }  
+                              </tbody>
+                          </>
+                          :     
+                          <img className='d-block ml-auto mr-auto' src={loading} alt=""/>                         
+                          
+                        }
                     </table>
 
                     :
