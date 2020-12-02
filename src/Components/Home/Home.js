@@ -1,24 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Home.css';
-import { UserContext } from '../../App';
-import { useContext } from 'react';
-import Card from '../Card/Cards';
+
+import AllCardContainer from '../AllCardContainer/AllCardContainer';
 
 const Home = () => {
-    const [loggedInUser, setLoggedInUser, selectedTask, setSelectedTask] = useContext(UserContext);
-    const [tasks, setTasks] = useState([]);
-    const handleSelectedTask = task => {
-        setSelectedTask(task);
-    }
-    const colors = ['#FFBD3E', '#FF7044', '#3F90FC', '#421FCF'];
-    let colorIndex = 0;
-    const handleColorIndex = () => colorIndex > 2 ?  colorIndex = 0 :  colorIndex = colorIndex + 1;
-
-    useEffect(() => {
-        fetch('https://immense-spire-11805.herokuapp.com/alltasks')
-        .then(res => res.json())
-        .then(data => setTasks(data))
-    }, [])
 
     return (
         <div className="container">
@@ -31,11 +16,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className='card_contain'>
-                { tasks &&
-                    tasks.map(task =><Card key={task._id} colors={colors} handleColorIndex={handleColorIndex} handleSelectedTask={handleSelectedTask} task={task}></Card>)
-                }
-            </div>
+            <AllCardContainer/>
         </div>
     );
 };

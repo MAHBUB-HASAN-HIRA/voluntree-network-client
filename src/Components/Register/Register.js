@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import React, { useContext,  useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import './Register.css';
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
 import { useForm } from "react-hook-form";
@@ -7,9 +7,10 @@ import { enGB } from 'date-fns/locale'
 import { DatePicker } from 'react-nice-dates'
 import 'react-nice-dates/build/style.css'
 import { UserContext } from '../../App';
+import AllCardContainer from '../AllCardContainer/AllCardContainer';
 
 const Register = () => {
-    const [loggedInUser, setLoggedInUser, selectedTask, setSelectedTask] = useContext(UserContext);
+    const [loggedInUser, , selectedTask] = useContext(UserContext);
     const [date, setDate] = useState(new Date());
     const { register, handleSubmit } = useForm();
 
@@ -19,17 +20,22 @@ const Register = () => {
         const volunteerData = {
             registerData:{...data, date,...selectedTask}
         }
-        fetch('https://immense-spire-11805.herokuapp.com/register-user', {
+        fetch('https://voluntree-network-101.herokuapp.com/register-user?email=' + loggedInUser.email, {
             method:'POST',
-            headers:{'Content-Type': 'application/json'},
+            headers:{
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${sessionStorage.getItem('token')}`
+              },
             body:JSON.stringify(volunteerData)
-            })
-            .then(res => res.json())
-            .then(data => {
-              if(data){
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data){
                 alert('Registration SuccessFully');
+                sessionStorage.removeItem('task');
                 history.replace('/mytasks');
-              }});
+            }
+        });
     };  
 
     return (
@@ -67,6 +73,7 @@ const Register = () => {
                         <Link to='/'><img className='tree_img_logo' src={TreeLogo} alt=""/></Link>
                     </div>
                     <h1>Please Select a Task</h1>
+                    <AllCardContainer/>
                 </div>
             }
         </>

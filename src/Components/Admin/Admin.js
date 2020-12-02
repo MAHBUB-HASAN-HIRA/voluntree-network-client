@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Admin.css";
 import TreeLogo from "../../volunteer-network-resources/logos/Group 1329.png";
 import deleteLogo from "../../volunteer-network-resources/logos/trash-2 9.png";
 import { Link } from "react-router-dom";
 import userLogo from "../../volunteer-network-resources/logos/users-alt 1.png"
 import plusLogo from "../../volunteer-network-resources/logos/plus 1.png";
-import uploadLogo from "../../volunteer-network-resources/logos/cloud-upload-outline 1.png";
 import { enGB } from 'date-fns/locale';
 import { DatePicker } from 'react-nice-dates';
 import 'react-nice-dates/build/style.css';
+import FileBase64 from 'react-file-base64';
+import { UserContext } from "../../App";
 
 const Admin = () => {
+  const [loggedInUser] = useContext(UserContext);
   const [date, setDate] = useState(new Date());
   const [registeredToggled, setRegisteredToggled] = useState(true);
   const [formData, setFormData] = useState({});
-  const [registerList, setRegisterList] = useState([])
+  const [registerList, setRegisterList] = useState([]);
+  const [image, setImage] = useState('')
+  const token = sessionStorage.getItem('token');
 
   const handleBlur = e => {
     const newForm = {...formData}
@@ -23,60 +27,75 @@ const Admin = () => {
   };
 
   const handleSubmit = ()=> {
-    if(formData.title){
-      const postData = {...formData, date};
-      fetch('https://immense-spire-11805.herokuapp.com/alltasks', {
-        method:'POST',
-        headers:{'Content-Type': 'application/json'},
-        body:JSON.stringify(postData)
-        })
-        .then(res => res.json())
-        .then(data => {
-          if(data){
-            alert('Event Added Successful');
-          }});
+    if(formData.title && formData.description){
+      if(image){
+        const postData = {...formData, date, 'img_link': image.base64};
+        fetch('https://voluntree-network-101.herokuapp.com/singleTask?email=' + loggedInUser.email, {
+          method:'POST',
+          headers:{
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${token}`
+          },
+          body:JSON.stringify(postData)
+          })
+          .then(res => res.json())
+          .then(data => {
+            if(data){
+              alert('Event Added Successful');
+              setRegisteredToggled(false);
+              setFormData({});
+              setImage('');
+              window.location.reload();
+              
+            }});
+      }
+      else{
+        alert('Please Select Volunteer Image');
+      };
 
     }
     else{
-      alert('Please Enter Title and Date')
-    }
-  }
+      alert('Please Fill all Field');
+    };
+  };
+
 
 const handleDelete = id => {
-
-    fetch(`https://immense-spire-11805.herokuapp.com/delete/${id}`, {
+  const email = loggedInUser.email;
+    fetch(`https://voluntree-network-101.herokuapp.com/delete/${id}`, {
         method: 'DELETE',
+        headers:{
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${token}`
+        },
+        body:JSON.stringify({email})
     })
       .then(res => res.json())
       .then(data => {
           if (data) {
-            alert('Volunteer SuccessFully Deleted')
-            afterDeleteDataLoad();
+            alert('Volunteer SuccessFully Deleted');
+            window.location.reload();
           }
       });
-
-
-}
-
-  const afterDeleteDataLoad = () => {
-    fetch('https://immense-spire-11805.herokuapp.com/register-user/admin')
-    .then(res => res.json())
-    .then(data =>{
-      if(data){
-        setRegisterList(data);
-      }
-    });
-
   }
 
     useEffect(() => {
-        fetch('https://immense-spire-11805.herokuapp.com/register-user/admin')
+      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      if(userInfo){
+        fetch(`https://voluntree-network-101.herokuapp.com/register-user/admin?email=${userInfo.email}`,{
+          method:'GET',
+          headers:{
+            'Content-Type': 'application/json',
+            'authorization': `Bearer ${token}`
+          },
+        })
         .then(res => res.json())
         .then(data =>{
           if(data){
             setRegisterList(data);
           }
         });
+      }
     },[])
 
   return (
@@ -84,13 +103,13 @@ const handleDelete = id => {
       <div className="row">
         <div className="left_control">
             <Link to='/'><img className='tree_pic_logo' src={TreeLogo} alt=""/></Link>
-            <p  onClick={() => setRegisteredToggled(true)} className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
+            <p onClick={() => setRegisteredToggled(true)} className='volunteer_register_list'><img src={userLogo} alt=""/> Volunteer register list</p>
             <p onClick={() => setRegisteredToggled(false)} className='volunteer_register_list'><img src={plusLogo} alt=""/> Add event</p>
         </div>
           <div className="rightData_show">
             <h4>{registeredToggled ? "Volunteer register list" : "Add Event"}</h4>
             <div className='all_user_data_container'>
-                <div className='table_container'>
+                <div className='table_container table-responsive'>
                 { 
                     registeredToggled ?
 
@@ -99,7 +118,7 @@ const handleDelete = id => {
                             <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Email ID</th>
-                            <th scope="col">Registrating Date</th>
+                            <th scope="col">Registering Date</th>
                             <th scope="col">Volunteer Task</th>
                             <th scope="col">Action</th>
                             </tr>
@@ -114,7 +133,7 @@ const handleDelete = id => {
                                   <td>{(new Date(register_user.registerData.date).toDateString('dd/MM/yyyy'))}</td>
                                   <td>{register_user.registerData.taskTitle}</td>
                                   <td onClick={() => handleDelete(register_user._id)} className='delete_user_logo'><img src={deleteLogo} alt="delete"/></td>
-                              </tr> 
+                                </tr> 
                               )
                             }
                         </tbody>
@@ -141,9 +160,8 @@ const handleDelete = id => {
                                 />
                             )}
                           </DatePicker>
-                        <label for='banner'>Description</label><br/>
-                        <input type="file" name="file-1[]" id="file-1" className="inputFile inputFile-1" data-multiple-caption="{count} files selected" multiple=""/>
-                        <label for="file-1"><img className='upload_img' src={uploadLogo} alt="upload"/> <span>Upload img</span></label>
+                        <label for='image'>Volunteer Image</label><br/>
+                        <FileBase64 id='image' multiple={false} onDone={ base64 => setImage(base64 ) } />
                       </div>
                           <button onClick={handleSubmit} type='submit' className='submit_btn btn btn-primary'>Submit</button>
                     </div>

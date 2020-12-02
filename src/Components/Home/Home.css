@@ -17,21 +17,9 @@
     .search_area .input-group{
         width: 80%;
     }
-    .card_contain{
-        display:flex;
-        flex-wrap: wrap;
-        width:100%;
-        justify-content: center;
-    }
   }
   @media screen and (max-width: 450px) {
     .search_area .input-group{
         width: 95%;
-    }
-    .card_contain{
-        display:flex;
-        flex-wrap: wrap;
-        width:100%;
-        justify-content: center;
     }
   }

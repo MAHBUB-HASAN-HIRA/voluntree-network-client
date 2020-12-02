@@ -1,38 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext} from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import logo from "../../volunteer-network-resources/logos/Group 1329.png";
 import { UserContext } from "../../App";
 
 const Header = () => {
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
-  const [currentLocation, setCurrentLocation] = useState("");
-
-  useEffect(() => {
-    setCurrentLocation(window.location.pathname);
-  }, [useParams()]);
 
 const handleSignOut = () => {
-  localStorage.removeItem(`userInfo`);
-  setLoggedInUser({
-    isSignIn:false,
-    name:'',
-    email:'',
-    password:'',
-    photoURL:'',
-    error:'',
-    success: false,
-  })
+  setLoggedInUser({});
+  sessionStorage.removeItem(`userInfo`);
+  sessionStorage.removeItem(`token`);
 }
-
-  let customClassName = "navForOther";
-  if (currentLocation === "/" || currentLocation === "/mytasks") {
-    customClassName = "navForHome container";
-  }
 
   return (
     <div className='nav_div'>
-      <div className={customClassName}>
+      <div>
         <nav className="navbar navbar-expand-lg navbar-light">
           <Link to="/">
             <img className="img_logo" src={logo} alt="volunteer network" />
@@ -70,18 +53,18 @@ const handleSignOut = () => {
                   Blog
                 </Link>
               </li>
+              {loggedInUser.isSignIn && 
+                <li className="nav-item">
+                  <Link className="nav_link" to="/mytasks">
+                    My Task
+                  </Link>
+                </li>
+              }
               <li className="nav-item">
                 {loggedInUser.isSignIn && (
                   <span className="nav_link name">
                     <strong>{loggedInUser.name}</strong>
                   </span>
-                )}
-              </li>
-              <li className="nav-item">
-                {loggedInUser.isSignIn && (
-                  <button onClick={handleSignOut} className="btn btn-danger">
-                    SignOut
-                  </button>
                 )}
               </li>
               <li className="nav-item">
@@ -93,6 +76,13 @@ const handleSignOut = () => {
                 <Link className="btn btn-dark" to="/admin">
                   Admin
                 </Link>
+              </li>
+              <li className="nav-item">
+                {loggedInUser.isSignIn && (
+                  <button onClick={handleSignOut} className="btn btn-danger">
+                    SignOut
+                  </button>
+                )}
               </li>
             </ul>
           </div>

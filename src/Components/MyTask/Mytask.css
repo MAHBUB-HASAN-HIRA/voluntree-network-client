@@ -1,5 +1,6 @@
 .myTasks_container{
     background-color: #F8FAFC !important;
+    min-height: 560px;
 }
 
 .card-row{
@@ -18,7 +19,7 @@
     margin: 20px; 
 }
 .card-body button{
-    margin: 40px 50% !important;
+    margin: 40px 35%!important;
 }
 
 @media screen and (max-width: 1200px) {
